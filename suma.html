@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button class="btn">add</button>
+    <button class="btn">minus</button>
+    <button class="btn">mul</button>
+    <button class="btn">div</button>
+    <script>
+        document.querySelectorAll('.btn')
+        .forEach((button)=>{
+            button.addEventListener('click',()=>{
+               console.log(button.innerText);
+            })
+        })
+    </script>
+</body>
+</html>
