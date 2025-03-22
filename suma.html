@@ -17,6 +17,17 @@
                console.log(button.innerText);
             })
         })
+        setTimeout(()=>{
+            console.log('hello')
+        },3000)
+
+        const a =setInterval(()=>{
+            console.log("vanakam")
+        },3000)
+
+        setTimeout(()=>{
+            clearInterval(a);
+        },10000)
     </script>
 </body>
 </html>
