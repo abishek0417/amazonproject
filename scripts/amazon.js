@@ -1,4 +1,4 @@
-import {cart}  from '../data/cart.js';
+import {cart,addtocart}  from '../data/cart.js';
 import { products } from '../data/products.js';
 
 let productHTML='';
@@ -59,47 +59,32 @@ products.forEach((product)=>{
 
 document.querySelector(".js-product-grid").innerHTML=productHTML;
 
-document.querySelectorAll('.js-add-to-cart')
-.forEach((button)=>{
-    button.addEventListener('click',()=>{
+function updatecartquantity(){
+    let cartQuantity=0;
+    cart.forEach((item)=>{
+        cartQuantity+=item.quantity;
 
-     const productId=button.dataset.productId;
+    })
+    document.querySelector('.js-cart-quantity').innerText=cartQuantity
+}
 
-     let matchingItem;
-
-     cart.forEach((item)=>{
-        if(productId===item.productId){
-            matchingItem=item
-        }
-    });
-
-    const quantitySelector = document.querySelector(
-        `.js-quantity-selector-${productId}`
-      );
-      const quantity = Number(quantitySelector.value);
-
-        if(matchingItem){
-           matchingItem.quantity+=quantity
-        }
-        else{
-            cart.push({ 
-            productId,    //productId:productId,
-            quantity    //quantity:quantity
-             });
-        }
-
-        let cartQuantity=0;
-        cart.forEach((item)=>{
-            cartQuantity+=item.quantity;
-
-        })
-        document.querySelector('.js-cart-quantity').innerText=cartQuantity
-   // console.log(cartQuantity)
-   //  console.log(cart);
+function addedmessage(productId){
     const addedMessage = document.querySelector(`.js-added-to-cart-${productId}`);
     addedMessage.classList.add('added-to-cart-visible');
     setTimeout(()=>{
         addedMessage.classList.remove('added-to-cart-visible');
     },2000)
+}
+
+//clicking add to cart button event
+document.querySelectorAll('.js-add-to-cart')
+.forEach((button)=>{
+    button.addEventListener('click',()=>{
+     const productId=button.dataset.productId;
+
+     addtocart(productId);
+     updatecartquantity();
+     addedmessage(productId);
+
     })
 })
