@@ -1,6 +1,6 @@
 export let cart= JSON.parse(localStorage.getItem('cart')) || [] 
 
-function savetostorage(){
+export function savetostorage(){
     localStorage.setItem('cart',JSON.stringify(cart));
 }
 

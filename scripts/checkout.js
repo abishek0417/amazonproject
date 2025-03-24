@@ -1,4 +1,4 @@
-import {cart,removefromcart,calculatecartquantity} from '../data/cart.js';
+import {cart,removefromcart,calculatecartquantity,savetostorage} from '../data/cart.js';
 import { products } from '../data/products.js';
 import { formatecurrency } from './utility/money.js';
 
@@ -36,16 +36,11 @@ cart.forEach((cartitem)=>{
         </div>
         <div class="product-quantity">
           <span>
-            Quantity: <span class="quantity-label">${cartitem.quantity}</span>
+            Quantity: <span class="quantity-label js-cart-quantity-${matchingproduct.id}">${cartitem.quantity}</span>
           </span>
-          <span class="update-quantity-link link-primary js-update-link" data-product-id="${matchingproduct.id}">
+          <span class="update-quantity-link-${matchingproduct.id} link-primary js-update-link" data-product-id="${matchingproduct.id}">
             Update
           </span>
-          <input class="quantity-input">
-          <span class="save-quantity-link link-primary js-save-link"
-              data-product-id="${matchingproduct.id}">
-              Save
-            </span>
           <span class="delete-quantity-link link-primary js-delete-link" data-product-id="${matchingproduct.id}">
             Delete
           </span>
@@ -121,13 +116,41 @@ function updatecheckquantity(){
 updatecheckquantity();
 
 //update button
-document.querySelectorAll(".js-update-link")
-.forEach((updatelink)=>{
-    updatelink.addEventListener('click',()=>{
-        const productId=updatelink.dataset.productId;
-        const container = document.querySelector(
-            `.js-cart-item-container-${productId}`
-          );
-          container.classList.add('is-editing-quantity');
+document.querySelectorAll('.js-update-link').forEach((link)=>{
+  link.addEventListener('click',()=>{
+    const productId=link.dataset.productId;
+
+    document.querySelector(`.update-quantity-link-${productId}`).innerHTML=
+    `<button class="quantity-sub-btn-${productId}">-</button>
+    <button class="quantity-add-btn-${productId}">+</button>`
+
+    //add button
+    document.querySelector(`.quantity-add-btn-${productId}`).addEventListener('click',()=>{
+      cart.forEach((item)=>{
+        if(item.productId===productId){
+          item.quantity+=1;
+          document.querySelector(`.js-cart-quantity-${productId}`).innerHTML=item.quantity;
+          updatecheckquantity()
+          savetostorage()
+        }
+      })
     })
+    //sub button
+    document.querySelector(`.quantity-sub-btn-${productId}`).addEventListener('click',()=>{
+      cart.forEach((item)=>{
+        if(item.productId===productId){
+          if(item.quantity>1){
+            item.quantity-=1
+          }
+          document.querySelector(`.js-cart-quantity-${productId}`).innerHTML=item.quantity;
+          updatecheckquantity()
+          savetostorage()
+        }
+      })
+    })
+
+
+      
+    
+  })
 })
